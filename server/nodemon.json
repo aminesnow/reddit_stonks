@@ -1,0 +1,22 @@
+{
+    "verbose": false,
+    "ignore": [
+      "*.spec.ts",
+      "dist/*",
+      "node_modules/*",
+      "coverage/*"
+    ],
+    "env": {
+      "NODE_PATH": ".",
+      "TS_NODE": "true"
+    },
+    "execMap": {
+      "ts": "node -r ts-node/register --inspect src",
+      "json": "node -r ts-node/register --inspect src"
+    },
+    "exec": "node -r ts-node/register --inspect src",
+    "ext": "*.ts,*.json",
+    "signal": "SIGTERM",
+    "delay": "500"
+  }
+  

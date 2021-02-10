@@ -1,0 +1,33 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">All Stonks 🚀 </h1>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form class="form-inline">
+            <div class="form-group mb-2">
+                <label for="inputPeriod" class="my-1 mr-2">Time period (days)</label>
+                <input type="number" class="form-control" id="inputPeriod" min="1" [(ngModel)]="period"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="inputSource" class="my-1 mr-2">Source</label>
+                <select id="inputSource" class="form-control" [(ngModel)]="source" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let s of SOURCES" [value]="s">{{s}}</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary mb-2" (click)="loadStonks(1)">Apply</button>
+
+        </form>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-12">
+        <app-top-stonks *ngIf="stonks.length > 0" [title]="''" [data]="stonks" [collectionSize]="stonksSize"
+            [pageSize]="pageSize" (loadNext)="loadStonks($event)"></app-top-stonks>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="sidebar-sticky pt-3">
+    <ul class="nav flex-column" *ngIf="page">
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/'" [ngClass]="page == '/' ? 'active' : ''">
+                Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/stonks'" [ngClass]="isActive('/stonks') ? 'active' : ''">
+                All Stonks
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/ticker'" [ngClass]="isActive('/ticker') ? 'active' : ''">
+                Stonk
+            </a>
+        </li>
+    </ul>
+</div>

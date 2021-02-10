@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+
+    stonks-db:
+        image: mongo:4.2
+        env_file:
+            - ./.env
+        volumes:
+            - "./mongo/db:/data/db"
+            - "./mongo/seed:/seed"
+            - "./mongo/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+            - "./mongo/dump/:/dump/"
+        ports: 
+            - "27017:27017"
+
+    stonks-server:
+        build: server
+        env_file:
+            - ./.env
+        volumes:
+            - "./logs:/var/log/reddit_momentum"
+        ports:
+            - "3000:3000"
+        links:
+            - stonks-db
+        depends_on:
+            - stonks-db
+        restart: always

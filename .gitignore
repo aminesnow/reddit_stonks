@@ -1,0 +1,12 @@
+mongo/db
+mongo/db/*/**
+mongo/dump
+mongo/dump/*/**
+server/dist/*/**
+server/dist
+server/node_modules
+server/node_modules/*/**
+.env
+/*/.env
+/*/**/.env
+.vscode/

@@ -1,0 +1,17 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2" *ngIf="stonkTitle">Stonk: {{stonkTitle}} 🚀 </h1>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form class="form-inline">
+            <div class="form-group mb-2">
+                <label for="inputPeriod" class="my-1 mr-2">Company</label>
+                <input type="text" class="form-control mr-2" id="inputPeriod" [(ngModel)]="query"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <button type="button" class="btn btn-primary mb-2" (click)="loadStonk()">Search</button>
+        </form>
+    </div>
+</div>

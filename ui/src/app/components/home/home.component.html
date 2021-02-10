@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Top Stonks 🚀 </h1>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <app-top-stonks *ngIf="dayTop.length > 0" [title]="'Last 24h'" [data]="dayTop" [collectionSize]="dayTopSize"
+            [pageSize]="pageSize" (loadNext)="loadDayTop($event)"></app-top-stonks>
+    </div>
+    <div class="col-6">
+        <app-top-stonks *ngIf="weekTop.length > 0" [title]="'Last 7 days'" [data]="weekTop"
+            [collectionSize]="weekTopSize" [pageSize]="pageSize" (loadNext)="loadWeekTopTop($event)"></app-top-stonks>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <app-top-stonks *ngIf="fortnightTop.length > 0" [title]="'Last 14 days'" [data]="fortnightTop"
+            [collectionSize]="fortnightTopSize" [pageSize]="pageSize" (loadNext)="loadDortnightTopTop($event)"></app-top-stonks>
+    </div>
+    <div class="col-6">
+        <app-top-stonks *ngIf="monthTop.length > 0" [title]="'Last 30 days'" [data]="monthTop"
+            [collectionSize]="monthTopSize" [pageSize]="pageSize" (loadNext)="loadMonthTop($event)"></app-top-stonks>
+    </div>
+</div>
