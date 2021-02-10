@@ -40,7 +40,6 @@ db = myclient[MONGO_DB]
 yh_tickers = db["yh_tickers"]
 mentions = db["mentions"]
 
-#sources = ["wallstreetbets", "investing", "stocks"]
 sources = SOURCES.split(':')
 api = PushshiftAPI()
 

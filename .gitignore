@@ -2,6 +2,8 @@ mongo/db
 mongo/db/*/**
 mongo/dump
 mongo/dump/*/**
+mongo/seed/
+mongo/seed/*/**/
 server/dist/*/**
 server/dist
 server/node_modules
