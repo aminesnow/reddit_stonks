@@ -13,7 +13,7 @@
             <div class="form-group mx-sm-3 mb-2">
                 <label for="inputSource" class="my-1 mr-2">Source</label>
                 <select id="inputSource" class="form-control" [(ngModel)]="source" [ngModelOptions]="{standalone: true}">
-                    <option *ngFor="let s of SOURCES" [value]="s">{{s}}</option>
+                    <option *ngFor="let s of sources" [value]="s">{{s}}</option>
                 </select>
             </div>
             <button type="button" class="btn btn-primary mb-2" (click)="loadStonks(1)">Apply</button>

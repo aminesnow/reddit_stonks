@@ -2,8 +2,6 @@ from psaw import PushshiftAPI
 import datetime
 from datetime import datetime, timedelta
 import pymongo 
-from dotenv import load_dotenv
-from pathlib import PurePath
 import os
 import re
 
@@ -21,19 +19,23 @@ def isTickerFormat(word):
 
     return isTicker and (dolla or correctSize)
 
+if os.getenv("ENV") != 'production':
+    from dotenv import load_dotenv
+    from pathlib import PurePath
 
-# get env variables
-env_path = PurePath('./.env')
-load_dotenv(dotenv_path=env_path)
+    # get env variables
+    env_path = PurePath('./.env')
+    load_dotenv(dotenv_path=env_path)
 
 MONGO_USER = os.getenv("MONGO_USER")
 MONGO_PASS = os.getenv("MONGO_PASS")
 MONGO_URL = os.getenv("MONGO_URL")
 MONGO_DB = os.getenv("MONGO_DB")
 SOURCES = os.getenv("SOURCES")
+DAYS = int(os.getenv("DAYS"))
 
 # connect to db
-dbUrl = 'mongodb://{}:{}@{}:27017/{}'.format(MONGO_USER, MONGO_PASS, 'localhost', MONGO_DB)
+dbUrl = 'mongodb://{}:{}@{}:27017/{}'.format(MONGO_USER, MONGO_PASS, MONGO_URL, MONGO_DB)
 myclient = pymongo.MongoClient(dbUrl)
 
 db = myclient[MONGO_DB]
@@ -43,7 +45,7 @@ mentions = db["mentions"]
 sources = SOURCES.split(':')
 api = PushshiftAPI()
 
-date = datetime.today() - timedelta(days = 1)
+date = datetime.today() - timedelta(days = DAYS)
 start_time = int(date.timestamp())
 
 for source in sources:

@@ -10,6 +10,7 @@ import { TickerComponent } from './components/ticker/ticker.component';
 import { TopStonksComponent } from './components/top-stonks/top-stonks.component';
 import { AllStonksComponent } from './components/all-stonks/all-stonks.component';
 import { FormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

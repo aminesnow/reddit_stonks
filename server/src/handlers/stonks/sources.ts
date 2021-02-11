@@ -1,0 +1,20 @@
+import { NextFunction, Request, Response } from 'express';
+import { Operation } from 'express-openapi';
+
+import { GET as getApiDoc } from './sources.doc';
+import { Mention } from 'src/models/Mention'
+
+/**
+ * Get list of all the tickers in mentions
+ * @param req Request
+ * @param res Response
+ */
+export const GET: Operation = [ async (req: Request, res: Response, next: NextFunction) => {
+
+    const sources = await Mention.distinct('source');
+
+    res.status(200).send(sources);
+}];
+
+
+GET.apiDoc = getApiDoc;

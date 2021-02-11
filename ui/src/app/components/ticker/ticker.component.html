@@ -11,7 +11,31 @@
                     [ngModelOptions]="{standalone: true}">
             </div>
 
-            <button type="button" class="btn btn-primary mb-2" (click)="loadStonk()">Search</button>
+            <button type="button" class="btn btn-primary mb-2"  [routerLink]="" [queryParams]="{query: query}">Search</button>
         </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            chart
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            mentions
+        </div>
+        <div class="col-4">
+            <aside class="col-md-4 blog-sidebar">
+                <div class="p-4 mb-3 bg-light rounded">
+                  <h4 class="font-italic">About</h4>
+                  <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+                </div>
+              </aside>
+        </div>
     </div>
 </div>

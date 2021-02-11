@@ -27,6 +27,7 @@ export const GET: Operation = [async (req: Request, res: Response, next: NextFun
             source
         };
     }
+
     const tickers = await Mention.aggregate([
         { $match: where },
         { $group: {
