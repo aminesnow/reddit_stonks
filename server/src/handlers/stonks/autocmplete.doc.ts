@@ -1,24 +1,17 @@
+
 import { OpenAPIV3 } from 'openapi-types';
 
 export const GET: OpenAPIV3.OperationObject = {
   security: [],
-  summary: 'Count all the mentions of a stonk',
-  description: 'Count all the mentions of a stonk',
-  parameters: [{
-    in: 'path',
-    name: 'ticker',
+  summary: 'List of stonks for autocomplete',
+  description: 'List of stonks for autocomplete',
+  parameters:[{
+    in: 'query',
+    name: 'query',
     schema: {
       type: 'string',
     },
     required: true,
-  },
-  {
-      in: 'query',
-      name: 'source',
-      schema: {
-          type: 'string',
-      },
-      required: false,
   }],
   tags: ['stonks'],
   responses: {

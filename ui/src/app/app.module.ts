@@ -11,6 +11,7 @@ import { TopStonksComponent } from './components/top-stonks/top-stonks.component
 import { AllStonksComponent } from './components/all-stonks/all-stonks.component';
 import { FormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
+import { MentionsTableComponent } from './components/mentions-table/mentions-table.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ChartsModule } from 'ng2-charts';
     HomeComponent,
     TickerComponent,
     TopStonksComponent,
-    AllStonksComponent
+    AllStonksComponent,
+    MentionsTableComponent
   ],
   imports: [
     BrowserModule,

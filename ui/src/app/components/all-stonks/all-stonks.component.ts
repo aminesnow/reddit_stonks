@@ -10,6 +10,7 @@ import { StonksService } from 'src/app/services/stonks.service';
 export class AllStonksComponent implements OnInit {
 
   pageSize: number = 10;
+  page: number = 0;
   period: number;
 
   stonks: TopStonks[] = [];
@@ -22,7 +23,7 @@ export class AllStonksComponent implements OnInit {
 
   ngOnInit(): void {
     this.period = 1;
-    this.stonksService.getMentionSources().subscribe(s => this.sources.concat(s));
+    this.stonksService.getMentionSources().subscribe(s => this.sources = this.sources.concat(s));
     this.stonksService.countTopStonks(this.period, this.source).subscribe(c => {
       this.stonksSize = c['count'];      
       this.loadStonks(this.period);
@@ -30,6 +31,7 @@ export class AllStonksComponent implements OnInit {
   }
 
   loadStonks(page: number) {    
+    this.page = page;
     this.stonksService.getTopStonks(this.period, page-1, this.pageSize, this.source).subscribe(s => this.stonks = s);
   }
 

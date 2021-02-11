@@ -5,7 +5,7 @@ import { GET as getApiDoc } from './sources.doc';
 import { Mention } from 'src/models/Mention'
 
 /**
- * Get list of all the tickers in mentions
+ * Get stonks subreddits
  * @param req Request
  * @param res Response
  */

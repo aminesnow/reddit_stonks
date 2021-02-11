@@ -11,7 +11,10 @@
         </thead>
         <tbody>
             <tr *ngFor="let stonk of data">
-                <td>{{stonk.ticker}}</td>
+                <td><a [routerLink]="'/ticker'" [queryParams]="{query: stonk.ticker}">
+                        <span class="badge badge-pill badge-success">{{stonk.ticker}}</span>
+                    </a>
+                </td>
                 <td>{{stonk.mentions}}</td>
                 <td>{{stonk.latestMention}}</td>
                 <td>{{stonk.date | date :'yyyy-MM-dd HH:mm:ss z'}}</td>

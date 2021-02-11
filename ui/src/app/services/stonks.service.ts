@@ -48,11 +48,8 @@ export class StonksService {
     return this.http.get<CompanyInfo>(`api/stonks/${ticker}/company-info`);
   }
 
-  getStonkLatestPosts(ticker: string, page?: number, size?: number, source?: string): Observable<StonkMention[]> {
-    let url = `api/stonks/${ticker}/mentions`;
-    if (page) {
-      url += '&page=' + page;
-    }
+  getStonkLatestPosts(ticker: string, page: number, size?: number, source?: string): Observable<StonkMention[]> {
+    let url = `api/stonks/${ticker}/mentions?page=${page}`;
 
     if (size) {
       url += '&size=' + size;
@@ -65,11 +62,18 @@ export class StonksService {
     return this.http.get<StonkMention[]>(url);
   }
 
-  getStonkMentionTrend(ticker: string, days?: number, source?: string): Observable<Trend[]> {
-    let url = `api/stonks/${ticker}/trend`;
-    if (days) {
-      url += '&days=' + days;
+  countStonkLatestPosts(ticker: string, source?: string): Observable<number> {
+    let url = `api/stonks/${ticker}/mentions/count`;
+
+    if (source) {
+      url += '?source=' + source;
     }
+
+    return this.http.get<number>(url);
+  }
+
+  getStonkMentionTrend(ticker: string, days: number, source?: string): Observable<Trend[]> {
+    let url = `api/stonks/${ticker}/trend?days=${days}`;
 
     if (source) {
       url += '&source=' + source;

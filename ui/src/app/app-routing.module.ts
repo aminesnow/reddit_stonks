@@ -11,7 +11,8 @@ const routes: Routes = [{
 },
 {
   path: 'ticker',
-  component: TickerComponent
+  component: TickerComponent,
+  runGuardsAndResolvers: 'always'
 },
 {
   path: 'stonks',
@@ -19,7 +20,7 @@ const routes: Routes = [{
 }];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy', onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

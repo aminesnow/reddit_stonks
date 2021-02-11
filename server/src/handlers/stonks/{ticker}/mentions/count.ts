@@ -12,7 +12,14 @@ import { Mention } from 'src/models/Mention'
 export const GET: Operation = [async (req: Request, res: Response, next: NextFunction) => {    
 
     const ticker = req.params['ticker'];
-    const count = await Mention.countDocuments({ "ticker": ticker });
+    const source = (req.query['source'] && req.query['source'] != 'all') ? req.query['source'] : undefined;
+
+    let query: any = { "ticker": ticker };
+    if (source) {
+        query['source'] = source;
+    }
+
+    const count = await Mention.countDocuments(query);
 
     res.status(200).json({count: count});
 }];

@@ -1,15 +1,15 @@
-import { TopStonks } from './../../models/TopStonks';
+import { StonkMention } from './../../models/StonkMention';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-top-stonks',
-  templateUrl: './top-stonks.component.html',
-  styleUrls: ['./top-stonks.component.css']
+  selector: 'app-mentions-table',
+  templateUrl: './mentions-table.component.html',
+  styleUrls: ['./mentions-table.component.css']
 })
-export class TopStonksComponent implements OnInit {
+export class MentionsTableComponent implements OnInit {
 
   @Input()
-  data: TopStonks[];
+  data: StonkMention[];
 
   @Input()
   title: string;
