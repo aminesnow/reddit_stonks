@@ -1,7 +1,7 @@
 import json
 import requests
 import utils.db_connector as db
-import utils.get.env as env
+import utils.get_env as env
 
 RAPIDAPI_KEY = env.get_env("RAPIDAPI_KEY")
 RAPIDAPI_HOST = env.get_env("RAPIDAPI_HOST")

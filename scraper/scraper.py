@@ -3,7 +3,7 @@ import datetime
 from datetime import datetime, timedelta
 import re
 import utils.db_connector as db
-import utils.get.env as env
+import utils.get_env as env
 
 def utc_to_local(utc_dt):
     return datetime.fromtimestamp(utc_dt)
