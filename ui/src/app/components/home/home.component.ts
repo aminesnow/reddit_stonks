@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
       this.loadDortnightTopTop(1);
     });
 
-    this.stonksService.countTopStonks(30).subscribe(c => {
+    this.stonksService.countTopStonks(30).subscribe(c => {      
       this.monthTopSize = c['count'];
       this.loadMonthTop(1);
     });

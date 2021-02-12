@@ -32,9 +32,7 @@ export const GET: Operation = [async (req: Request, res: Response, next: NextFun
         { $match: where },
         { $group: {
                 "_id": "$ticker",
-                "ticker": { $first: "$ticker" },
-                "latestMention": { $first: "$title" },
-                "date": { $first: "$created_date" },
+                "created_date": { $last: "$$ROOT" },
                 "mentions": { $sum: 1 }
             }
         },
@@ -43,7 +41,14 @@ export const GET: Operation = [async (req: Request, res: Response, next: NextFun
         { $limit: size }
     ]);
 
-    res.status(200).send(tickers);
+    res.status(200).send(tickers.map(t => {
+        return {
+            "ticker": t["created_date"]["ticker"],
+            "latestMention": t["created_date"]["title"],
+            "date": t["created_date"]["created_date"],
+            "mentions": t["mentions"]
+        };
+    }));
 }];
 
 

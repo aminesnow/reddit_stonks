@@ -1,9 +1,10 @@
+import { AutocompleteCompany } from './../../../../server/src/models/AutocompleteCompany';
 import { TopStonks } from './../models/TopStonks';
 import { CompanyInfo } from './../models/CompanyInfo';
 import { StonkMention } from './../models/StonkMention';
 import { Trend } from './../models/Trend';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,6 +16,10 @@ export class StonksService {
 
   getMentionSources(): Observable<string[]> {
     return this.http.get<string[]>('api/stonks/sources');
+  }
+
+  autocompleteCompanies(query: string): Observable<AutocompleteCompany[]> {
+    return this.http.get<AutocompleteCompany[]>('api/stonks/autocomplete?query=' + query);
   }
 
   getTopStonks(days: number, page?: number, size?: number, source?: string): Observable<TopStonks[]> {
@@ -80,5 +85,13 @@ export class StonksService {
     }
 
     return this.http.get<Trend[]>(url);
+  }
+
+  getPriceAction(ticker: string, startTs: number, endTs: number) {
+    return this.http.get(`v8/finance/chart/${ticker}?symbol=${ticker}&period1=${startTs}&period2=${endTs}&useYfid=true&interval=90m&includePrePost=true&events=div%7Csplit%7Cearn&lang=en-US&region=US&crumb=5%2Faa1sowFUZ&corsDomain=finance.yahoo.com`);
+  }
+
+  getFinancials(ticker: string, statement_type: string) {
+    return this.http.get(`symbol/${ticker}/financials-data?period_type=annual&${statement_type}=income-statement&order_type=latest_right&is_pro=false`);
   }
 }

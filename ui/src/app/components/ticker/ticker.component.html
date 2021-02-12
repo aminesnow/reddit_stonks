@@ -4,7 +4,19 @@
             <form class="form-inline">
                 <div class="form-group mb-2">
                     <label for="inputPeriod" class="my-1 mr-2">Company</label>
-                    <input type="text" class="form-control mr-2" id="inputPeriod" [(ngModel)]="query"
+                    <input type="text" class="form-control mr-2" id="inputPeriod" 
+                    [resultFormatter]="searchFormatter" 
+                    [inputFormatter]="searchFormatter"
+                    [(ngModel)]="autocompleteCompany"
+                    [ngbTypeahead]="autocomplete"
+                    [ngModelOptions]="{standalone: true}" 
+                    (selectItem)="onAutocompleteSelect($event)"
+                    (keyup.enter)="loadStonk()">
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="inputPeriod" class="my-1 mr-2">Time period (days)</label>
+                    <input type="number" class="form-control" id="inputPeriod" min="1" [(ngModel)]="period"
                         [ngModelOptions]="{standalone: true}" (keyup.enter)="loadStonk()">
                 </div>
 
@@ -21,52 +33,68 @@
     </div>
 </div>
 
-
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{companyInfo?.longName}} 🚀 </h1>
-</div>
-
-<div class="container" *ngIf="trendTs.length > 0">
-    <div class="row">
-        <div class="col-12">
-            <div style="display: block;">
-                <canvas baseChart height="150"
-                  [datasets]="lineChartData"
-                  [labels]="lineChartLabels"
-                  [options]="lineChartOptions"
-                  [colors]="lineChartColors"
-                  [legend]="lineChartLegend"
-                  [chartType]="lineChartType"
-                  [plugins]="lineChartPlugins">
-                </canvas>
-              </div>
+<div *ngIf="query && trendTs.length > 0">
+    
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{companyInfo?.longName}} 🚀 </h1>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div style="display: block;">
+                    <canvas baseChart height="100"
+                      [datasets]="lineChartData"
+                      [labels]="lineChartLabels"
+                      [options]="lineChartOptions"
+                      [colors]="lineChartColors"
+                      [legend]="true"
+                      [chartType]="'line'">
+                    </canvas>
+                  </div>
+            </div>
         </div>
     </div>
-</div>
+    
+    <div class="container" *ngIf="priceAction.data.length > 0">
+        <plotly-plot [data]="priceAction.data" [layout]="priceAction.layout"></plotly-plot>
+    </div>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-8">
-            <app-mentions-table *ngIf="mentions.length > 0" [title]="'Latest posts'" [data]="mentions"
-                [collectionSize]="mentionsSize" [pageSize]="pageSize" [page]="page"
-                (loadNext)="loadStonkMentions($event)"></app-mentions-table>
-        </div>
-        <div class="col-4">
-            <aside class="blog-sidebar">
-                <div class="p-4 mb-3 bg-light rounded">
-                    <h4>{{companyInfo?.longName}}</h4>
-                    <b>Sector:</b> {{companyInfo?.sector}} <br />
-                    <b>Industry:</b> {{companyInfo?.industry}} <br />
-                    <b>Website:</b> <a href="{{companyInfo?.website}}" target="_blank"> {{companyInfo?.website}}</a> <br />
-                    <b>Location:</b> {{companyInfo?.city}}, {{companyInfo?.country}} <br />
-                    <br />
-                    <b>Summary: </b>
-                    <p class="mb-0">{{companyInfo?.longBusinessSummary}}</p>
+    
+    <div class="container">
+        <hr/>
 
-
-                </div>
-            </aside>
+        <div class="row">
+            <div class="col-8">
+                <app-mentions-table *ngIf="mentions.length > 0" [title]="'Latest posts'" [data]="mentions"
+                    [collectionSize]="mentionsSize" [pageSize]="pageSize" [page]="page"
+                    (loadNext)="loadStonkMentions($event)"></app-mentions-table>
+            </div>
+            <div class="col-4">
+                <aside class="blog-sidebar">
+                    <div class="p-4 mb-3 bg-light rounded">
+                        <h4>{{companyInfo?.longName}}</h4>
+                        <b>Sector:</b> {{companyInfo?.sector}} <br />
+                        <b>Industry:</b> {{companyInfo?.industry}} <br />
+                        <b>Website:</b> <a href="{{companyInfo?.website}}" target="_blank"> {{companyInfo?.website}}</a> <br />
+                        <b>Location:</b> {{companyInfo?.city}}, {{companyInfo?.country}} <br />
+                        <b>More Info: </b> 
+                        <ul>
+                            <li>
+                                <a href="https://finance.yahoo.com/quote/{{query}}/chart?p={{query}}" target="_blank">Yahoo Finance</a> <br />
+                            </li>
+                            <li>
+                                <a href="https://seekingalpha.com/symbol/{{query}}" target="_blank">Seeking Alpha</a> <br />
+                            </li>
+                        </ul>
+                        <b>Summary: </b>
+                        <p class="mb-0">{{companyInfo?.longBusinessSummary}}</p>
+    
+    
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
 </div>

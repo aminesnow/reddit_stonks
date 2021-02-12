@@ -12,6 +12,10 @@ import { AllStonksComponent } from './components/all-stonks/all-stonks.component
 import { FormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 import { MentionsTableComponent } from './components/mentions-table/mentions-table.component';
+import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { MentionsTableComponent } from './components/mentions-table/mentions-tab
     NgbModule,
     HttpClientModule,
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    PlotlyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,34 +1,15 @@
 import json
 import requests
-import os
-import pymongo
+import utils.db_connector as db
+import utils.get.env as env
 
-if os.getenv("ENV") != 'production':
-    from dotenv import load_dotenv
-    from pathlib import PurePath
-
-    # get env variables
-    env_path = PurePath('./.env')
-    load_dotenv(dotenv_path=env_path)
+RAPIDAPI_KEY = env.get_env("RAPIDAPI_KEY")
+RAPIDAPI_HOST = env.get_env("RAPIDAPI_HOST")
 
 
-MONGO_USER = os.getenv("MONGO_USER")
-MONGO_PASS = os.getenv("MONGO_PASS")
-MONGO_URL = os.getenv("MONGO_URL")
-MONGO_DB = os.getenv("MONGO_DB")
-RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
-
-# connect to db
-dbUrl = 'mongodb://{}:{}@{}:27017/{}'.format(
-    MONGO_USER, MONGO_PASS, MONGO_URL, MONGO_DB)
-myclient = pymongo.MongoClient(dbUrl)
-
-db = myclient[MONGO_DB]
-companies = db["companies"]
-mentions = db["mentions"]
-yh_tickers = db["yh_tickers"]
-
+companies = db.get_companies()
+mentions = db.get_mentions()
+yh_tickers = db.get_yh_tickers()
 
 
 def get_rapidapi_info(ticker):

@@ -18,7 +18,7 @@ export class TopStonksComponent implements OnInit {
   page: number;
 
   @Input()
-  pageSize: number = 20;
+  pageSize: number;
 
   @Input()
   collectionSize: number;
@@ -28,8 +28,11 @@ export class TopStonksComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {   
-    this.page = 1; 
+  ngOnInit(): void {
+    if (!this.pageSize) {
+      this.pageSize = 20;
+    }
+    this.page = 1;
   }
 
   loadNextPage(page: number) {
