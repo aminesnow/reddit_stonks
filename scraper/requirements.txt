@@ -1,1 +1,4 @@
-psaw
+psaw==0.1.0
+pymongo==3.11.3
+requests==2.24.0
+python-dotenv==0.15.0

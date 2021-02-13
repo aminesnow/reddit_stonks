@@ -16,7 +16,7 @@ services:
     stonks-server:
         build: server
         env_file:
-            - ./.env
+            - .env
         volumes:
             - "./logs:/var/log/reddit_momentum"
         ports:
@@ -26,3 +26,14 @@ services:
         depends_on:
             - stonks-db
         restart: always
+
+    scraper:
+        build: scraper
+        env_file:
+            - .env
+        volumes:
+            - "./logs:/var/log/"
+        links:
+            - stonks-db
+        depends_on:
+            - stonks-db

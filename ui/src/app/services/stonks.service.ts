@@ -91,7 +91,11 @@ export class StonksService {
     return this.http.get(`v8/finance/chart/${ticker}?symbol=${ticker}&period1=${startTs}&period2=${endTs}&useYfid=true&interval=90m&includePrePost=true&events=div%7Csplit%7Cearn&lang=en-US&region=US&crumb=5%2Faa1sowFUZ&corsDomain=finance.yahoo.com`);
   }
 
-  getFinancials(ticker: string, statement_type: string) {
-    return this.http.get(`symbol/${ticker}/financials-data?period_type=annual&${statement_type}=income-statement&order_type=latest_right&is_pro=false`);
+  getFinancials(ticker: string) {
+
+
+    return this.http.get(`ws/fundamentals-timeseries/v1/finance/timeseries/${ticker}?lang=en-US&region=US&symbol=${ticker}&padTimeSeries=true&type=trailingPretaxIncome,annualGrossProfit,trailingTotalExpenses,annualTotalRevenue,trailingGrossProfit,trailingTotalRevenue,annualPretaxIncome,annualTotalExpenses&merge=false&period1=493590046&period2=1613148405&corsDomain=finance.yahoo.com`);
   }
 }
+
+

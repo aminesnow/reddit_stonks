@@ -21,7 +21,26 @@ import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 export class TickerComponent implements OnInit {
 
   barChartsLayout = {
-    barmode: 'group'
+    barmode: 'group',
+    xaxis: {
+      type: 'category',
+    }
+  };
+
+  revenueProfit = {
+    data: [],
+    layout: {
+      ...this.barChartsLayout,
+      title: "Total Revenue VS Gross Profit"
+    }
+  };
+
+  incomeExpenses = {
+    data: [],
+    layout: {
+      ...this.barChartsLayout,
+      title: "Pretaxe Income VS Total expenses"
+    }
   };
 
   priceAction = {
@@ -69,7 +88,7 @@ export class TickerComponent implements OnInit {
   mentions: StonkMention[] = [];
   mentionsSize: number;
 
-  pageSize: number = 20;
+  pageSize: number = 10;
   page: number;
   period: number;
 
@@ -134,6 +153,7 @@ export class TickerComponent implements OnInit {
       this.loadStonkMentions(this.page);
       this.loadCompanyInfo();
       this.loadPriceAction();
+      this.loadFinancials();
     });
   }
 
@@ -169,16 +189,16 @@ export class TickerComponent implements OnInit {
 
   loadPriceAction() {
     const date = new Date();
-    const endTs = Math.floor(date.getTime()/1000);
+    const endTs = Math.floor(date.getTime() / 1000);
 
-    let dateOffset = (24*60*60*1000) * this.period;
+    let dateOffset = (24 * 60 * 60 * 1000) * this.period;
     let startDate = new Date();
-    startDate.setTime(startDate.getTime() - dateOffset);   
-      
-    const startTs = Math.floor(startDate.getTime()/1000);        
+    startDate.setTime(startDate.getTime() - dateOffset);
+
+    const startTs = Math.floor(startDate.getTime() / 1000);
 
     this.stonksService.getPriceAction(this.query, startTs, endTs).subscribe(data => {
-      if(data && data["chart"] && data["chart"]["result"]) {
+      if (data && data["chart"] && data["chart"]["result"]) {
         const prices = data["chart"]["result"][0]["indicators"]["quote"][0];
         const dates = data["chart"]["result"][0]["timestamp"].map(ts => new Date(ts * 1000));
         this.priceAction.data = [{
@@ -194,7 +214,7 @@ export class TickerComponent implements OnInit {
           xaxis: 'x',
           yaxis: 'y'
         }];
-  
+
         this.priceAction.layout.title = this.query + ' price';
       }
 
@@ -202,9 +222,138 @@ export class TickerComponent implements OnInit {
   }
 
   loadFinancials() {
-    this.stonksService.getFinancials(this.query, 'income-statement').subscribe(data => {
+    this.stonksService.getFinancials(this.query).subscribe((datas: any) => {
 
+      if (datas["timeseries"] && datas["timeseries"]["result"]) {
+
+        // Total revenue
+        const totalRevenue = datas["timeseries"]["result"]
+          .filter(data => ["annualTotalRevenue", "trailingTotalRevenue"].includes(data["meta"]["type"][0]))
+          .map(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"])
+          .flat(1)
+          .map(data => {
+            data["date"] = new Date(data["asOfDate"]);
+            return data;
+          })
+          .sort((a, b) => {
+            return (a["date"].getTime() - b["date"].getTime());
+          })
+          .reduce((acc, curr) => {
+            if (curr["periodType"] == "TTM") {
+              acc["x"].push("TTM");
+            }
+            else {
+              acc["x"].push(curr["asOfDate"]);
+            }
+            acc["y"].push(curr["reportedValue"]["raw"]);
+            return acc;
+          }, {
+              x: [],
+              y: [],
+              name: "Total Revenue",
+              type: "bar"
+          });
+
+        // Gross Profit
+        const grossProfit = datas["timeseries"]["result"]
+          .filter(data => ["annualGrossProfit", "trailingGrossProfit"].includes(data["meta"]["type"][0]))
+          .map(data => data["annualGrossProfit"] || data["trailingGrossProfit"])
+          .flat(1)
+          .map(data => {
+            data["date"] = new Date(data["asOfDate"]);
+            return data;
+          })
+          .sort((a, b) => {
+            return (a["date"].getTime() - b["date"].getTime());
+          })
+          .reduce((acc, curr) => {
+            if (curr["periodType"] == "TTM") {
+              acc["x"].push("TTM");
+            }
+            else {
+              acc["x"].push(curr["asOfDate"]);
+            }
+            acc["y"].push(curr["reportedValue"]["raw"]);
+            return acc;
+          }, {
+              x: [],
+              y: [],
+              name: "Gross Profit",
+              type: "bar"
+          });
+
+        // Pretaxe income
+        const pretaxIncome = datas["timeseries"]["result"]
+          .filter(data => ["annualPretaxIncome", "trailingPretaxIncome"].includes(data["meta"]["type"][0]))
+          .map(data => data["annualPretaxIncome"] || data["trailingPretaxIncome"])
+          .flat(1)
+          .map(data => {
+            data["date"] = new Date(data["asOfDate"]);
+            return data;
+          })
+          .sort((a, b) => {
+            return (a["date"].getTime() - b["date"].getTime());
+          })
+          .reduce((acc, curr) => {
+            if (curr["periodType"] == "TTM") {
+              acc["x"].push("TTM");
+            }
+            else {
+              acc["x"].push(curr["asOfDate"]);
+            }
+            acc["y"].push(curr["reportedValue"]["raw"]);
+            return acc;
+          }, {
+              x: [],
+              y: [],
+              name: "Pretaxe Income",
+              type: "bar"
+          });
+
+        // Total expenses
+        const totalExpenses = datas["timeseries"]["result"]
+          .filter(data => ["annualTotalExpenses", "trailingTotalExpenses"].includes(data["meta"]["type"][0]))
+          .map(data => data["annualTotalExpenses"] || data["trailingTotalExpenses"])
+          .flat(1)
+          .map(data => {
+            data["date"] = new Date(data["asOfDate"]);
+            return data;
+          })
+          .sort((a, b) => {
+            return (a["date"].getTime() - b["date"].getTime());
+          })
+          .reduce((acc, curr) => {
+            if (curr["periodType"] == "TTM") {
+              acc["x"].push("TTM");
+            }
+            else {
+              acc["x"].push(curr["asOfDate"]);
+            }
+            acc["y"].push(curr["reportedValue"]["raw"]);
+            return acc;
+          }, {
+              x: [],
+              y: [],
+              name: "Total Expenses",
+              type: "bar"
+          });          
+
+        this.revenueProfit.data.push(totalRevenue, grossProfit);
+        this.incomeExpenses.data.push(pretaxIncome, totalExpenses);
+
+      }
     });
+  }
+
+  private get_date(label: string) {
+
+    if (label == "TTM") {
+      return new Date();
+    }
+    else {
+      const sts = label.split(' ');
+      return new Date([sts[0], 'mon', sts[1]].join(' '));
+    }
   }
 
   onRouteChanged(params: ParamMap) {

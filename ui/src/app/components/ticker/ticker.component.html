@@ -97,4 +97,11 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <hr>
+        <h2>Financials</h2>
+        <plotly-plot *ngIf="revenueProfit.data.length > 0" [data]="revenueProfit.data" [layout]="revenueProfit.layout"></plotly-plot>
+        <plotly-plot *ngIf="incomeExpenses.data.length > 0" [data]="incomeExpenses.data" [layout]="incomeExpenses.layout"></plotly-plot>
+    </div>
 </div>

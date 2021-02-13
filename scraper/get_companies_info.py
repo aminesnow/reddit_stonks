@@ -53,74 +53,76 @@ def insert_doc(company):
     print('inserted {} info. id: {}'.format(ticker, res.inserted_id))
 
 
-# get all tickers in database
-tickers = mentions.distinct('ticker')
+if __name__ == "__main__":
 
-api_calls = 0
-CALLS_LIMIT = 300
+    # get all tickers in database
+    tickers = mentions.distinct('ticker')
 
-for ticker in tickers:
-    count = companies.count_documents({"symbol": ticker})
+    api_calls = 0
+    CALLS_LIMIT = 300
 
-    if (count == 0) and api_calls < CALLS_LIMIT:
-        params = (
-            ('formatted', 'true'),
-            ('crumb', '5/aa1sowFUZ'),
-            ('lang', 'en-US'),
-            ('region', 'US'),
-            ('modules', 'assetProfile,secFilings'),
-            ('corsDomain', 'finance.yahoo.com'),
-        )
+    for ticker in tickers:
+        count = companies.count_documents({"symbol": ticker})
 
-        resp = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/{}'.format(ticker),
-                            params=params)
+        if (count == 0) and api_calls < CALLS_LIMIT:
+            params = (
+                ('formatted', 'true'),
+                ('crumb', '5/aa1sowFUZ'),
+                ('lang', 'en-US'),
+                ('region', 'US'),
+                ('modules', 'assetProfile,secFilings'),
+                ('corsDomain', 'finance.yahoo.com'),
+            )
 
-        try:
-            info = json.loads(resp.content.decode('utf-8'))
+            resp = requests.get('https://query1.finance.yahoo.com/v10/finance/quoteSummary/{}'.format(ticker),
+                                params=params)
 
-            company = {}
-            if (info is not None
-                and info["quoteSummary"] is not None
-                and info["quoteSummary"]["result"] is not None
-                and info["quoteSummary"]["result"][0] is not None
-                and "assetProfile" in info["quoteSummary"]["result"][0]):
+            try:
+                info = json.loads(resp.content.decode('utf-8'))
 
-                company = {
-                    "longName": ticker,
-                    "symbol": ticker
-                }
-                if ("longBusinessSummary" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["longBusinessSummary"] = info["quoteSummary"]["result"][0]["assetProfile"]["longBusinessSummary"]
+                company = {}
+                if (info is not None
+                    and info["quoteSummary"] is not None
+                    and info["quoteSummary"]["result"] is not None
+                    and info["quoteSummary"]["result"][0] is not None
+                    and "assetProfile" in info["quoteSummary"]["result"][0]):
 
-                if ("city" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["city"] = info["quoteSummary"]["result"][0]["assetProfile"]["city"]
+                    company = {
+                        "longName": ticker,
+                        "symbol": ticker
+                    }
+                    if ("longBusinessSummary" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["longBusinessSummary"] = info["quoteSummary"]["result"][0]["assetProfile"]["longBusinessSummary"]
 
-                if ("sector" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["sector"] = info["quoteSummary"]["result"][0]["assetProfile"]["sector"]
+                    if ("city" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["city"] = info["quoteSummary"]["result"][0]["assetProfile"]["city"]
 
-                if ("industry" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["industry"] = info["quoteSummary"]["result"][0]["assetProfile"]["industry"]
-                
-                if ("country" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["country"] = info["quoteSummary"]["result"][0]["assetProfile"]["country"]
+                    if ("sector" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["sector"] = info["quoteSummary"]["result"][0]["assetProfile"]["sector"]
 
-                if ("website" in info["quoteSummary"]["result"][0]["assetProfile"]):
-                    company["website"] = info["quoteSummary"]["result"][0]["assetProfile"]["website"]
+                    if ("industry" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["industry"] = info["quoteSummary"]["result"][0]["assetProfile"]["industry"]
+                    
+                    if ("country" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["country"] = info["quoteSummary"]["result"][0]["assetProfile"]["country"]
 
-                yh_comp = yh_tickers.find_one({"symbol": ticker}, {"longName": 1})
-                company["longName"] = yh_comp["longName"]
-        
-            else:
-                print('error: no public results found for {}'.format(ticker))
+                    if ("website" in info["quoteSummary"]["result"][0]["assetProfile"]):
+                        company["website"] = info["quoteSummary"]["result"][0]["assetProfile"]["website"]
+
+                    yh_comp = yh_tickers.find_one({"symbol": ticker}, {"longName": 1})
+                    company["longName"] = yh_comp["longName"]
+            
+                else:
+                    print('error: no public results found for {}'.format(ticker))
+                    company = get_rapidapi_info(ticker)
+                    api_calls = api_calls + 1
+
+                insert_doc(company)
+                print('api_calls: {}'.format(api_calls))
+
+            except:
+                print('An exception occurred on public results found for {}'.format(ticker)) 
                 company = get_rapidapi_info(ticker)
                 api_calls = api_calls + 1
-
-            insert_doc(company)
-            print('api_calls: {}'.format(api_calls))
-
-        except:
-            print('An exception occurred on public results found for {}'.format(ticker)) 
-            company = get_rapidapi_info(ticker)
-            api_calls = api_calls + 1
-            insert_doc(company)
-            print('api_calls: {}'.format(api_calls))
+                insert_doc(company)
+                print('api_calls: {}'.format(api_calls))

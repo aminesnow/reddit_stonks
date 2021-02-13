@@ -5,7 +5,7 @@ import path from 'path'
 import mongoose from 'mongoose';
 import { config as dotenvConfig } from 'dotenv';
 
-if (process.env.NODE_ENV !== 'production') {    
+if (process.env.ENV !== 'production') {    
     dotenvConfig({ path: __dirname + '/../.env' });
 }
 const MONGO_USER = process.env.MONGO_USER;

@@ -1,5 +1,6 @@
 import pymongo
 import os
+
 if os.getenv("ENV") != 'production':
     from dotenv import load_dotenv
     from pathlib import PurePath
@@ -35,3 +36,6 @@ def get_yh_tickers():
 
 def get_mentions():
     return db["mentions"]
+
+def get_financials():
+    return db["financials"]

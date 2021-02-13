@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TopStonks } from 'src/app/models/TopStonks';
 import { StonksService } from 'src/app/services/stonks.service';
 
@@ -19,20 +20,41 @@ export class AllStonksComponent implements OnInit {
   sources: string[] = ["all"];
   source: string = "all";
 
-  constructor(private stonksService: StonksService) { }
+  constructor(
+    private stonksService: StonksService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.period = 1;
     this.stonksService.getMentionSources().subscribe(s => this.sources = this.sources.concat(s));
     this.loadStonks(1);
+    this.route.queryParamMap.subscribe(params => {
+      this.onRouteChanged(params);
+    });
   }
 
-  loadStonks(page: number) {    
+  loadPage() {
+    this.router.navigate(['/stonks'], { queryParams: { source: this.source, period: this.period } });
+  }
+
+  loadStonks(page: number) {
     this.page = page;
     this.stonksService.countTopStonks(this.period, this.source).subscribe(c => {
-      this.stonksSize = c['count'];            
-      this.stonksService.getTopStonks(this.period, page-1, this.pageSize, this.source).subscribe(s => this.stonks = s);
+      this.stonksSize = c['count'];
+      this.stonksService.getTopStonks(this.period, page - 1, this.pageSize, this.source).subscribe(s => this.stonks = s);
     });
+  }
+
+  onRouteChanged(params: ParamMap) {
+    this.page = 1;
+    if (params["params"]["source"]) {
+      this.source = params["params"]["source"];
+    }
+    if (params["params"]["period"]) {
+      this.period = params["params"]["period"];
+    }
+    this.loadStonks(this.page);
   }
 
 }
