@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Operation } from 'express-openapi';
 
 import { GET as getApiDoc } from './tickers.doc';
-import { Mention } from 'src/models/Mention'
+import { Mention } from '../../models/Mention'
 
 /**
  * Get list of all the tickers in mentions

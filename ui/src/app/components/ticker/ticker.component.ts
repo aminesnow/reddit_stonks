@@ -1,16 +1,16 @@
-import { AutocompleteCompany } from './../../../../../server/src/models/AutocompleteCompany';
 import { StonkMention } from './../../models/StonkMention';
 import { CompanyInfo } from './../../models/CompanyInfo';
 import { Trend } from './../../models/Trend';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { StonksService } from 'src/app/services/stonks.service';
+import { StonksService } from '../../../app/services/stonks.service';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import { AutocompleteCompany } from '../../../app/models/AutocompleteCompany';
 
 @Component({
   selector: 'app-ticker',

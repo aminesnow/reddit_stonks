@@ -14,5 +14,6 @@ server/node_modules/*/**
 .vscode/
 /*/**/__pycache__
 /*/**/__pycache__/*
-/*/**/logs
-/*/**/logs/*
+logs
+logs/*
+ui/proxy.config.json

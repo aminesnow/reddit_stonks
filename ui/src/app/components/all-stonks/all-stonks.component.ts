@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { TopStonks } from 'src/app/models/TopStonks';
-import { StonksService } from 'src/app/services/stonks.service';
+import { TopStonks } from '../../../app/models/TopStonks';
+import { StonksService } from '../../../app/services/stonks.service';
 
 @Component({
   selector: 'app-all-stonks',

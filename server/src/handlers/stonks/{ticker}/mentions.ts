@@ -1,4 +1,4 @@
-import { Mention } from 'src/models/Mention';
+import { Mention } from '../../../models/Mention';
 import { NextFunction, Request, Response } from 'express';
 import { Operation } from 'express-openapi';
 

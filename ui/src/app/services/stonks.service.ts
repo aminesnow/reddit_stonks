@@ -1,10 +1,10 @@
-import { AutocompleteCompany } from './../../../../server/src/models/AutocompleteCompany';
+import { AutocompleteCompany } from '../models/AutocompleteCompany';
 import { TopStonks } from './../models/TopStonks';
 import { CompanyInfo } from './../models/CompanyInfo';
 import { StonkMention } from './../models/StonkMention';
 import { Trend } from './../models/Trend';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Operation } from 'express-openapi';
-import { Company } from 'src/models/Company';
+import { Company } from '../../../models/Company';
 
 import { GET as getApiDoc } from './company-info.doc';
 
