@@ -12,6 +12,7 @@ const MONGO_USER = process.env.MONGO_USER;
 const MONGO_PASS = encodeURIComponent(process.env.MONGO_PASS || "");
 const MONGO_DB = process.env.MONGO_DB;
 const MONGO_URL = process.env.MONGO_URL;
+const SERVER_PORT = process.env.SERVER_PORT;
 
 const app = express();
 
@@ -47,7 +48,7 @@ mongoose.connect(dbUrl, options, (err) => {
         console.log('Database connection established');
 
         // Launch
-        app.listen(3000, () => {
+        app.listen(SERVER_PORT, () => {
         console.log('The application is listening on port 3000!');
 })
     }

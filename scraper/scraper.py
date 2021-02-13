@@ -27,7 +27,7 @@ def isTickerFormat(word):
                 'MEN', 'DARE', 'MOD', 'AGO', 'FAT', 'SKY', 'MAX', 'WISH', 'HOME', 'ONTO', 'IRL', 'EYES',
                 'KIDS', 'CAR', 'MASS', 'CRY', 'EOD', 'TECH', 'PSA', 'GAIN', 'FOX', 'KEY', 'PEAK', 'CUZ',
                 'PLUS', 'GROW', 'MAIN', 'COLD', 'ALLY', 'TOWN', 'BRO', 'FAM', 'ROAD', 'FOUR', 'LEAP', 'BLUE',
-                'BAND', 'SELF', 'SON', 'RACE', 'EXP', 'PRO', 'CORE', 'HUGE', 'CEO', 'BIG', 'ON']
+                'BAND', 'SELF', 'SON', 'RACE', 'EXP', 'PRO', 'CORE', 'HUGE', 'CEO', 'BIG', 'ON', 'MOON']
     correctSize = len(formatted) in [3, 4] and formatted not in engWords
 
     return isTicker and (dolla or correctSize)
