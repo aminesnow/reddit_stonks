@@ -4,22 +4,22 @@
 
 <div class="row">
     <div class="col-6">
-        <app-top-stonks *ngIf="dayTop.length > 0" [title]="'Last 24h'" [data]="dayTop" [collectionSize]="dayTopSize"
+        <app-top-stonks *ngIf="dayTop.length > 0" [title]="'Last 24h'" [data]="dayTop" [collectionSize]="dayTopSize" [loading]="loadingDayTop"
             [pageSize]="pageSize" (loadNext)="loadDayTop($event)"></app-top-stonks>
     </div>
     <div class="col-6">
-        <app-top-stonks *ngIf="weekTop.length > 0" [title]="'Last 7 days'" [data]="weekTop"
+        <app-top-stonks *ngIf="weekTop.length > 0" [title]="'Last 7 days'" [data]="weekTop" [loading]="loadingweekTop"
             [collectionSize]="weekTopSize" [pageSize]="pageSize" (loadNext)="loadWeekTopTop($event)"></app-top-stonks>
     </div>
 </div>
 
 <div class="row">
     <div class="col-6">
-        <app-top-stonks *ngIf="fortnightTop.length > 0" [title]="'Last 14 days'" [data]="fortnightTop"
+        <app-top-stonks *ngIf="fortnightTop.length > 0" [title]="'Last 14 days'" [data]="fortnightTop" [loading]="loadingFortnightTop"
             [collectionSize]="fortnightTopSize" [pageSize]="pageSize" (loadNext)="loadDortnightTopTop($event)"></app-top-stonks>
     </div>
     <div class="col-6">
-        <app-top-stonks *ngIf="monthTop.length > 0" [title]="'Last 30 days'" [data]="monthTop"
+        <app-top-stonks *ngIf="monthTop.length > 0" [title]="'Last 30 days'" [data]="monthTop" [loading]="loadingMonthTop"
             [collectionSize]="monthTopSize" [pageSize]="pageSize" (loadNext)="loadMonthTop($event)"></app-top-stonks>
     </div>
 </div>

@@ -23,6 +23,9 @@
     </table>
 </div>
 <div style="size: 100%;" class="pagination justify-content-center">
+    <b class="loading-overlay" *ngIf="loading">
+        <span class="loading-text">Loading....</span>
+    </b>
     <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="collectionSize"
         (pageChange)="loadNextPage($event)" [maxSize]="8" [ellipses]="true"></ngb-pagination>
 </div>

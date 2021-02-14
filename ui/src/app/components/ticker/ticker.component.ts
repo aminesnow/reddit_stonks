@@ -100,6 +100,8 @@ export class TickerComponent implements OnInit {
 
   autocompleteCompany: AutocompleteCompany;
 
+  loading: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -158,8 +160,12 @@ export class TickerComponent implements OnInit {
   }
 
   loadStonkMentions(page: number) {
+    this.loading = true;
     this.page = page;
-    this.stonksService.getStonkLatestPosts(this.query, page, this.pageSize, this.source).subscribe(s => this.mentions = s);
+    this.stonksService.getStonkLatestPosts(this.query, page, this.pageSize, this.source).subscribe(s => {
+      this.loading = false;
+      this.mentions = s
+    });
   }
 
   loadStonkTrend() {
@@ -226,11 +232,17 @@ export class TickerComponent implements OnInit {
 
       if (datas["timeseries"] && datas["timeseries"]["result"]) {
 
+        datas = datas["timeseries"]["result"];
+
+        console.log(datas);
+        
+        
         // Total revenue
-        const totalRevenue = datas["timeseries"]["result"]
-          .filter(data => ["annualTotalRevenue", "trailingTotalRevenue"].includes(data["meta"]["type"][0]))
-          .map(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"])
+        const totalRevenue = datas
+          .filter(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"])
+          .map(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"].slice(-1))
           .flat(1)
+          .filter(data => data)
           .map(data => {
             data["date"] = new Date(data["asOfDate"]);
             return data;
@@ -239,12 +251,7 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            if (curr["periodType"] == "TTM") {
-              acc["x"].push("TTM");
-            }
-            else {
-              acc["x"].push(curr["asOfDate"]);
-            }
+            acc["x"].push(curr["asOfDate"]);
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
@@ -255,10 +262,11 @@ export class TickerComponent implements OnInit {
           });
 
         // Gross Profit
-        const grossProfit = datas["timeseries"]["result"]
-          .filter(data => ["annualGrossProfit", "trailingGrossProfit"].includes(data["meta"]["type"][0]))
-          .map(data => data["annualGrossProfit"] || data["trailingGrossProfit"])
+        const grossProfit = datas
+          .filter(data => data["annualGrossProfit"] || data["trailingGrossProfit"])
+          .map(data => data["annualGrossProfit"] || data["trailingGrossProfit"].slice(-1))
           .flat(1)
+          .filter(data => data)
           .map(data => {
             data["date"] = new Date(data["asOfDate"]);
             return data;
@@ -267,12 +275,7 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            if (curr["periodType"] == "TTM") {
-              acc["x"].push("TTM");
-            }
-            else {
-              acc["x"].push(curr["asOfDate"]);
-            }
+            acc["x"].push(curr["asOfDate"]);
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
@@ -283,10 +286,11 @@ export class TickerComponent implements OnInit {
           });
 
         // Pretaxe income
-        const pretaxIncome = datas["timeseries"]["result"]
-          .filter(data => ["annualPretaxIncome", "trailingPretaxIncome"].includes(data["meta"]["type"][0]))
-          .map(data => data["annualPretaxIncome"] || data["trailingPretaxIncome"])
+        const pretaxIncome = datas
+          .filter(data => data["annualPretaxIncome"] || data["trailingPretaxIncome"])
+          .map(data => data["annualPretaxIncome"] || data["trailingPretaxIncome"].slice(-1))
           .flat(1)
+          .filter(data => data)
           .map(data => {
             data["date"] = new Date(data["asOfDate"]);
             return data;
@@ -295,12 +299,7 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            if (curr["periodType"] == "TTM") {
-              acc["x"].push("TTM");
-            }
-            else {
-              acc["x"].push(curr["asOfDate"]);
-            }
+            acc["x"].push(curr["asOfDate"]);
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
@@ -311,10 +310,11 @@ export class TickerComponent implements OnInit {
           });
 
         // Total expenses
-        const totalExpenses = datas["timeseries"]["result"]
-          .filter(data => ["annualTotalExpenses", "trailingTotalExpenses"].includes(data["meta"]["type"][0]))
-          .map(data => data["annualTotalExpenses"] || data["trailingTotalExpenses"])
+        const totalExpenses = datas
+          .filter(data => data["annualTotalExpenses"] || data["trailingTotalExpenses"])
+          .map(data => data["annualTotalExpenses"] || data["trailingTotalExpenses"].slice(-1))
           .flat(1)
+          .filter(data => data)
           .map(data => {
             data["date"] = new Date(data["asOfDate"]);
             return data;
@@ -323,12 +323,7 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            if (curr["periodType"] == "TTM") {
-              acc["x"].push("TTM");
-            }
-            else {
-              acc["x"].push(curr["asOfDate"]);
-            }
+            acc["x"].push(curr["asOfDate"]);
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
@@ -338,22 +333,11 @@ export class TickerComponent implements OnInit {
               type: "bar"
           });          
 
-        this.revenueProfit.data.push(totalRevenue, grossProfit);
-        this.incomeExpenses.data.push(pretaxIncome, totalExpenses);
+        this.revenueProfit.data = [totalRevenue, grossProfit];
+        this.incomeExpenses.data = [pretaxIncome, totalExpenses];
 
       }
     });
-  }
-
-  private get_date(label: string) {
-
-    if (label == "TTM") {
-      return new Date();
-    }
-    else {
-      const sts = label.split(' ');
-      return new Date([sts[0], 'mon', sts[1]].join(' '));
-    }
   }
 
   onRouteChanged(params: ParamMap) {

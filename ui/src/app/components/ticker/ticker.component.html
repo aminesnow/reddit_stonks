@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col-8">
                 <app-mentions-table *ngIf="mentions.length > 0" [title]="'Latest posts'" [data]="mentions"
-                    [collectionSize]="mentionsSize" [pageSize]="pageSize" [page]="page"
+                    [collectionSize]="mentionsSize" [pageSize]="pageSize" [page]="page" [loading]="loading"
                     (loadNext)="loadStonkMentions($event)"></app-mentions-table>
             </div>
             <div class="col-4">

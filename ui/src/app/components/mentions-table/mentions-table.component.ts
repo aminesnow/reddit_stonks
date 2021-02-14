@@ -26,13 +26,17 @@ export class MentionsTableComponent implements OnInit {
   @Output()
   loadNext = new EventEmitter();
 
+  @Input()
+  loading: boolean;
+
   constructor() { }
 
   ngOnInit(): void {   
     this.page = 1; 
+    this.loading = false;
   }
 
-  loadNextPage(page: number) {
+  loadNextPage(page: number) {    
     this.loadNext.emit(page);
   }
 

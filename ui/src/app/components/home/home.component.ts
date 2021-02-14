@@ -19,6 +19,10 @@ export class HomeComponent implements OnInit {
   fortnightTopSize: number;
   monthTop: TopStonks[] = [];
   monthTopSize: number;
+  loadingDayTop: boolean;
+  loadingweekTop: boolean;
+  loadingFortnightTop: boolean;
+  loadingMonthTop: boolean;
 
   constructor(private stonksService: StonksService ) { }
 
@@ -46,18 +50,38 @@ export class HomeComponent implements OnInit {
   }
 
   loadDayTop(page: number) {
-    this.stonksService.getTopStonks(1, page-1, this.pageSize).subscribe(s => this.dayTop = s);
+    this.loadingDayTop = true;
+
+    this.stonksService.getTopStonks(1, page-1, this.pageSize).subscribe(s => {
+      this.dayTop = s;
+      this.loadingDayTop = false;
+    });
   }
 
   loadWeekTopTop(page: number) {
-    this.stonksService.getTopStonks(7, page-1, this.pageSize).subscribe(s => this.weekTop = s);
+    this.loadingweekTop = true;
+
+    this.stonksService.getTopStonks(7, page-1, this.pageSize).subscribe(s => {
+      this.weekTop = s;
+      this.loadingweekTop = false;
+    });
   }
 
   loadDortnightTopTop(page: number) {
-    this.stonksService.getTopStonks(14, page-1, this.pageSize).subscribe(s => this.fortnightTop = s);
+    this.loadingFortnightTop = true;
+
+    this.stonksService.getTopStonks(14, page-1, this.pageSize).subscribe(s => {
+      this.fortnightTop = s;
+      this.loadingFortnightTop = false;
+    });
   }
 
   loadMonthTop(page: number) {
-    this.stonksService.getTopStonks(30, page-1, this.pageSize).subscribe(s => this.monthTop = s);
+    this.loadingMonthTop = true;
+
+    this.stonksService.getTopStonks(30, page-1, this.pageSize).subscribe(s => {
+      this.monthTop = s;
+      this.loadingMonthTop = false;
+    });
   }
 }

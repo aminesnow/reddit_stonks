@@ -26,6 +26,9 @@ export class TopStonksComponent implements OnInit {
   @Output()
   loadNext = new EventEmitter();
 
+  @Input()
+  loading: boolean;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -33,6 +36,7 @@ export class TopStonksComponent implements OnInit {
       this.pageSize = 20;
     }
     this.page = 1;
+    this.loading = false;
   }
 
   loadNextPage(page: number) {

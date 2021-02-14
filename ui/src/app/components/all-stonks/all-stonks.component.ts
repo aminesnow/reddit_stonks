@@ -20,6 +20,8 @@ export class AllStonksComponent implements OnInit {
   sources: string[] = ["all"];
   source: string = "all";
 
+  loading: boolean;
+
   constructor(
     private stonksService: StonksService,
     private router: Router,
@@ -40,9 +42,13 @@ export class AllStonksComponent implements OnInit {
 
   loadStonks(page: number) {
     this.page = page;
+    this.loading = true;
     this.stonksService.countTopStonks(this.period, this.source).subscribe(c => {
       this.stonksSize = c['count'];
-      this.stonksService.getTopStonks(this.period, page - 1, this.pageSize, this.source).subscribe(s => this.stonks = s);
+      this.stonksService.getTopStonks(this.period, page - 1, this.pageSize, this.source).subscribe(s => {
+        this.stonks = s;
+        this.loading = false;
+      });
     });
   }
 
