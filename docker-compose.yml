@@ -20,7 +20,7 @@ services:
         volumes:
             - "./logs:/var/log/reddit_momentum"
         ports:
-            - "3000:3000"
+            - "8000:8000"
         links:
             - stonks-db
         depends_on:

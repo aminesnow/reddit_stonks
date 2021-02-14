@@ -12,5 +12,5 @@ RUN npm run build
 RUN rm -r /usr/src/app/node_modules
 RUN rm -r /usr/src/app/src
 RUN npm install --production
-EXPOSE 3000
+EXPOSE 8000
 CMD ["npm", "start"]
