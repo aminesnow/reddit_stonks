@@ -256,9 +256,6 @@ export class TickerComponent implements OnInit {
 
         datas = datas["timeseries"]["result"];
 
-        console.log(datas);
-
-
         // Total revenue
         const totalRevenue = datas
           .filter(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"])
@@ -273,8 +270,10 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            acc["x"].push(curr["asOfDate"]);
-            acc["y"].push(curr["reportedValue"]["raw"]);
+            if (!acc["x"].includes(curr["asOfDate"])) {
+              acc["x"].push(curr["asOfDate"]);
+              acc["y"].push(curr["reportedValue"]["raw"]);
+            }
             return acc;
           }, {
             x: [],
@@ -297,8 +296,10 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            acc["x"].push(curr["asOfDate"]);
-            acc["y"].push(curr["reportedValue"]["raw"]);
+            if (!acc["x"].includes(curr["asOfDate"])) {
+              acc["x"].push(curr["asOfDate"]);
+              acc["y"].push(curr["reportedValue"]["raw"]);
+            }
             return acc;
           }, {
             x: [],
@@ -321,8 +322,10 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            acc["x"].push(curr["asOfDate"]);
-            acc["y"].push(curr["reportedValue"]["raw"]);
+            if (!acc["x"].includes(curr["asOfDate"])) {
+              acc["x"].push(curr["asOfDate"]);
+              acc["y"].push(curr["reportedValue"]["raw"]);
+            }
             return acc;
           }, {
             x: [],
@@ -345,8 +348,10 @@ export class TickerComponent implements OnInit {
             return (a["date"].getTime() - b["date"].getTime());
           })
           .reduce((acc, curr) => {
-            acc["x"].push(curr["asOfDate"]);
-            acc["y"].push(curr["reportedValue"]["raw"]);
+            if (!acc["x"].includes(curr["asOfDate"])) {
+              acc["x"].push(curr["asOfDate"]);
+              acc["y"].push(curr["reportedValue"]["raw"]);
+            }
             return acc;
           }, {
             x: [],

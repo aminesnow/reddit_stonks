@@ -1,4 +1,3 @@
-// tslint:disable: await-promise
 import { Request, Response } from 'express';
 import { OperationFunction } from 'express-openapi';
 import { Company } from '../../../models/Company';
