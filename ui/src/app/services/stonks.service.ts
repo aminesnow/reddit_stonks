@@ -92,7 +92,7 @@ export class StonksService {
   }
 
   getFinancials(ticker: string) {
-    return this.http.get(`ws/fundamentals-timeseries/v1/finance/timeseries/${ticker}?lang=en-US&region=US&symbol=${ticker}&padTimeSeries=true&type=trailingPretaxIncome,annualGrossProfit,trailingTotalExpenses,annualTotalRevenue,trailingGrossProfit,trailingTotalRevenue,annualPretaxIncome,annualTotalExpenses&merge=false&period1=493590046&period2=1613148405&corsDomain=finance.yahoo.com`);
+    return this.http.get(`ws/fundamentals-timeseries/v1/finance/timeseries/${ticker}?lang=en-US&region=US&symbol=${ticker}&padTimeSeries=true&type=trailingPretaxIncome,annualGrossProfit,trailingTotalExpenses,annualTotalRevenue,trailingGrossProfit,trailingTotalRevenue,annualPretaxIncome,annualTotalExpenses,annualNetDebt&merge=false&period1=493590046&period2=1613148405&corsDomain=finance.yahoo.com`);
   }
 
   addToWatchlist(ticker: string): Observable<CompanyInfo> {

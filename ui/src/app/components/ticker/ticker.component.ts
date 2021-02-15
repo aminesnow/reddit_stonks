@@ -32,7 +32,7 @@ export class TickerComponent implements OnInit {
     data: [],
     layout: {
       ...this.barChartsLayout,
-      title: "Total Revenue VS Gross Profit"
+      title: "Total Revenue VS Total expenses VS Gross Profit"
     }
   };
 
@@ -40,7 +40,7 @@ export class TickerComponent implements OnInit {
     data: [],
     layout: {
       ...this.barChartsLayout,
-      title: "Pretaxe Income VS Total expenses"
+      title: "Pretaxe Income VS Total Debt"
     }
   };
 
@@ -184,7 +184,8 @@ export class TickerComponent implements OnInit {
   loadStonkMentions(page: number) {
     this.loading = true;
     this.page = page;
-    this.stonksService.getStonkLatestPosts(this.query, page, this.pageSize, this.source).subscribe(s => {
+    
+    this.stonksService.getStonkLatestPosts(this.query, page-1, this.pageSize, this.source).subscribe(s => {
       this.loading = false;
       this.mentions = s
     });
@@ -359,16 +360,39 @@ export class TickerComponent implements OnInit {
             name: "Total Expenses",
             type: "bar"
           });
-
-        this.revenueProfit.data = [totalRevenue, grossProfit];
-        this.incomeExpenses.data = [pretaxIncome, totalExpenses];
+          
+          const totalDebt = (datas
+            .filter(data => data["annualNetDebt"])
+            .shift(1) || {"annualNetDebt": []})["annualNetDebt"]
+            .filter(data => data)
+            .map(data => {
+              data["date"] = new Date(data["asOfDate"]);
+              return data;
+            })
+            .sort((a, b) => {
+              return (a["date"].getTime() - b["date"].getTime());
+            })
+            .reduce((acc, curr) => {
+              if (!acc["x"].includes(curr["asOfDate"])) {
+                acc["x"].push(curr["asOfDate"]);
+                acc["y"].push(curr["reportedValue"]["raw"]);
+              }
+              return acc;
+            }, {
+              x: [],
+              y: [],
+              name: "Total Debt",
+              type: "bar"
+            });
+          this.revenueProfit.data = [totalRevenue, totalExpenses, grossProfit];
+          this.incomeExpenses.data = [pretaxIncome, totalDebt];
 
       }
     });
   }
 
   onRouteChanged(params: ParamMap) {
-    this.page = 0;
+    this.page = 1;
     this.query = params["params"]["query"] || undefined;
     if (params["params"]["source"]) {
       this.source = params["params"]["source"];

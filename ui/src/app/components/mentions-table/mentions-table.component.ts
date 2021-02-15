@@ -18,7 +18,7 @@ export class MentionsTableComponent implements OnInit {
   page: number;
 
   @Input()
-  pageSize: number = 20;
+  pageSize: number;
 
   @Input()
   collectionSize: number;
@@ -32,11 +32,13 @@ export class MentionsTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {   
-    this.page = 1; 
+    if (!this.pageSize) {
+      this.pageSize = 20;
+    }
     this.loading = false;
   }
 
-  loadNextPage(page: number) {    
+  loadNextPage(page: number) {        
     this.loadNext.emit(page);
   }
 

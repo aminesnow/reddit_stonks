@@ -39,8 +39,8 @@
                 <h1 class="h2">{{companyInfo?.longName}} 🚀 </h1>
             </div>
             <div class="col-3">
-                <button *ngIf="!companyInfo.watchlist" type="button" class="btn btn-success"
-                    (click)="addToWatchlist()" [disabled]="updatingWatchlist">Add to watchlist</button>
+                <button *ngIf="!companyInfo.watchlist" type="button" class="btn btn-success" (click)="addToWatchlist()"
+                    [disabled]="updatingWatchlist">Add to watchlist</button>
                 <button *ngIf="companyInfo.watchlist" type="button" class="btn btn-danger"
                     (click)="removeFromWatchlist()" [disabled]="updatingWatchlist">Remove form watchlist</button>
             </div>
@@ -86,11 +86,12 @@
                         <b>More Info: </b>
                         <ul>
                             <li>
-                                <a href="https://finance.yahoo.com/quote/{{query}}/chart?p={{query}}"
-                                    target="_blank">Yahoo Finance</a> <br />
+                                <a href="https://finance.yahoo.com/quote/{{query}}?p={{query}}" target="_blank">Yahoo
+                                    Finance</a> <br />
                             </li>
                             <li>
-                                <a href="https://seekingalpha.com/symbol/{{query}}" target="_blank">Seeking Alpha</a>
+                                <a href="https://www.marketwatch.com/investing/stock/{{query}}"
+                                    target="_blank">MarketWatch</a>
                                 <br />
                             </li>
                         </ul>
@@ -109,6 +110,7 @@
         <h2>Financials</h2>
         <plotly-plot *ngIf="revenueProfit.data.length > 0" [data]="revenueProfit.data" [layout]="revenueProfit.layout">
         </plotly-plot>
+
         <plotly-plot *ngIf="incomeExpenses.data.length > 0" [data]="incomeExpenses.data"
             [layout]="incomeExpenses.layout"></plotly-plot>
     </div>
