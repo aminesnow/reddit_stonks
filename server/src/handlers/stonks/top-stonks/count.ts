@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Operation } from 'express-openapi';
 
 import { GET as getApiDoc } from './count.doc';
-import { Mention } from '../../models/Mention'
+import { Mention } from '../../../models/Mention'
 
 /**
  * Count the top trending stonks on a given period of time

@@ -3,18 +3,24 @@ import { initialize } from 'express-openapi';
 import apiDoc from './apiDoc/api-doc';
 import path from 'path'
 import mongoose from 'mongoose';
-import { config as dotenvConfig } from 'dotenv';
+import { getEnvVar } from './services/env.service'
+import * as bodyParser from "body-parser";
 
-if (process.env.ENV !== 'production') {    
-    dotenvConfig({ path: __dirname + '/../.env' });
-}
-const MONGO_USER = process.env.MONGO_USER;
-const MONGO_PASS = encodeURIComponent(process.env.MONGO_PASS || "");
-const MONGO_DB = process.env.MONGO_DB;
-const MONGO_URL = process.env.MONGO_URL;
-const SERVER_PORT = process.env.SERVER_PORT;
+import jwt from 'express-jwt';
+
+const MONGO_USER = getEnvVar("MONGO_USER");
+const MONGO_PASS = encodeURIComponent(getEnvVar("MONGO_PASS") || "");
+const MONGO_DB = getEnvVar("MONGO_DB");
+const MONGO_URL = getEnvVar("MONGO_URL");
+const SERVER_PORT = getEnvVar("SERVER_PORT");
+const JWT_SECRET = getEnvVar("JWT_SECRET") || "";
 
 const app = express();
+
+// Using expressJwt module on /api/private subroutes to validate authentication
+app.use('/api/stonks', jwt({ secret: JWT_SECRET, algorithms: ['HS256'] }));
+
+app.use(bodyParser.json());
 
 initialize({
     apiDoc: apiDoc,
@@ -49,7 +55,7 @@ mongoose.connect(dbUrl, options, (err) => {
 
         // Launch
         app.listen(SERVER_PORT, () => {
-        console.log('The application is listening on port 3000!');
+        console.log('The application is listening on port ' + SERVER_PORT);
 })
     }
     else {

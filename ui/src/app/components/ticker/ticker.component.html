@@ -4,14 +4,10 @@
             <form class="form-inline">
                 <div class="form-group mb-2">
                     <label for="inputPeriod" class="my-1 mr-2">Company</label>
-                    <input type="text" class="form-control mr-2" id="inputPeriod" 
-                    [resultFormatter]="searchFormatter" 
-                    [inputFormatter]="searchFormatter"
-                    [(ngModel)]="autocompleteCompany"
-                    [ngbTypeahead]="autocomplete"
-                    [ngModelOptions]="{standalone: true}" 
-                    (selectItem)="onAutocompleteSelect($event)"
-                    (keyup.enter)="loadStonk()">
+                    <input type="text" class="form-control mr-2" id="inputPeriod" [resultFormatter]="searchFormatter"
+                        [inputFormatter]="searchFormatter" [(ngModel)]="autocompleteCompany"
+                        [ngbTypeahead]="autocomplete" [ngModelOptions]="{standalone: true}"
+                        (selectItem)="onAutocompleteSelect($event)" (keyup.enter)="loadStonk()">
                 </div>
 
                 <div class="form-group mb-2">
@@ -22,7 +18,8 @@
 
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="inputSource" class="my-1 mr-2">Source</label>
-                    <select id="inputSource" class="form-control" [(ngModel)]="source" [ngModelOptions]="{standalone: true}">
+                    <select id="inputSource" class="form-control" [(ngModel)]="source"
+                        [ngModelOptions]="{standalone: true}">
                         <option *ngFor="let s of sources" [value]="s">{{s}}</option>
                     </select>
                 </div>
@@ -34,36 +31,42 @@
 </div>
 
 <div *ngIf="query && trendTs.length > 0">
-    
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">{{companyInfo?.longName}} 🚀 </h1>
+
+    <div *ngIf="companyInfo"
+        class="ustify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="row">
+            <div class="col-9">
+                <h1 class="h2">{{companyInfo?.longName}} 🚀 </h1>
+            </div>
+            <div class="col-3">
+                <button *ngIf="!companyInfo.watchlist" type="button" class="btn btn-success"
+                    (click)="addToWatchlist()" [disabled]="updatingWatchlist">Add to watchlist</button>
+                <button *ngIf="companyInfo.watchlist" type="button" class="btn btn-danger"
+                    (click)="removeFromWatchlist()" [disabled]="updatingWatchlist">Remove form watchlist</button>
+            </div>
+        </div>
     </div>
-    
+
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div style="display: block;">
-                    <canvas baseChart height="100"
-                      [datasets]="lineChartData"
-                      [labels]="lineChartLabels"
-                      [options]="lineChartOptions"
-                      [colors]="lineChartColors"
-                      [legend]="true"
-                      [chartType]="'line'">
+                    <canvas baseChart height="100" [datasets]="lineChartData" [labels]="lineChartLabels"
+                        [options]="lineChartOptions" [colors]="lineChartColors" [legend]="true" [chartType]="'line'">
                     </canvas>
-                  </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <div class="container" *ngIf="priceAction.data.length > 0">
         <plotly-plot [data]="priceAction.data" [layout]="priceAction.layout"></plotly-plot>
     </div>
 
 
-    
+
     <div class="container">
-        <hr/>
+        <hr />
 
         <div class="row">
             <div class="col-8">
@@ -77,21 +80,24 @@
                         <h4>{{companyInfo?.longName}}</h4>
                         <b>Sector:</b> {{companyInfo?.sector}} <br />
                         <b>Industry:</b> {{companyInfo?.industry}} <br />
-                        <b>Website:</b> <a href="{{companyInfo?.website}}" target="_blank"> {{companyInfo?.website}}</a> <br />
+                        <b>Website:</b> <a href="{{companyInfo?.website}}" target="_blank"> {{companyInfo?.website}}</a>
+                        <br />
                         <b>Location:</b> {{companyInfo?.city}}, {{companyInfo?.country}} <br />
-                        <b>More Info: </b> 
+                        <b>More Info: </b>
                         <ul>
                             <li>
-                                <a href="https://finance.yahoo.com/quote/{{query}}/chart?p={{query}}" target="_blank">Yahoo Finance</a> <br />
+                                <a href="https://finance.yahoo.com/quote/{{query}}/chart?p={{query}}"
+                                    target="_blank">Yahoo Finance</a> <br />
                             </li>
                             <li>
-                                <a href="https://seekingalpha.com/symbol/{{query}}" target="_blank">Seeking Alpha</a> <br />
+                                <a href="https://seekingalpha.com/symbol/{{query}}" target="_blank">Seeking Alpha</a>
+                                <br />
                             </li>
                         </ul>
                         <b>Summary: </b>
                         <p class="mb-0">{{companyInfo?.longBusinessSummary}}</p>
-    
-    
+
+
                     </div>
                 </aside>
             </div>
@@ -101,7 +107,11 @@
     <div class="container">
         <hr>
         <h2>Financials</h2>
-        <plotly-plot *ngIf="revenueProfit.data.length > 0" [data]="revenueProfit.data" [layout]="revenueProfit.layout"></plotly-plot>
-        <plotly-plot *ngIf="incomeExpenses.data.length > 0" [data]="incomeExpenses.data" [layout]="incomeExpenses.layout"></plotly-plot>
+        <plotly-plot *ngIf="revenueProfit.data.length > 0" [data]="revenueProfit.data" [layout]="revenueProfit.layout">
+        </plotly-plot>
+        <plotly-plot *ngIf="incomeExpenses.data.length > 0" [data]="incomeExpenses.data"
+            [layout]="incomeExpenses.layout"></plotly-plot>
     </div>
 </div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

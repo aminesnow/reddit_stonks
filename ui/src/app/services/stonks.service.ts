@@ -1,7 +1,7 @@
 import { AutocompleteCompany } from '../models/AutocompleteCompany';
 import { TopStonks } from './../models/TopStonks';
 import { CompanyInfo } from './../models/CompanyInfo';
-import { StonkMention } from './../models/StonkMention';
+import { StonkMention, WatchlistItem } from './../models/StonkMention';
 import { Trend } from './../models/Trend';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -23,7 +23,7 @@ export class StonksService {
   }
 
   getTopStonks(days: number, page?: number, size?: number, source?: string): Observable<TopStonks[]> {
-    let url = 'api/top-stonks?days=' + days;
+    let url = 'api/stonks/top-stonks?days=' + days;
     if (page) {
       url += '&page=' + page;
     }
@@ -40,7 +40,7 @@ export class StonksService {
   }
 
   countTopStonks(days: number, source?: string): Observable<number> {
-    let url = 'api/top-stonks/count?days=' + days;
+    let url = 'api/stonks/top-stonks/count?days=' + days;
 
     if (source) {
       url += '&source=' + source;
@@ -92,9 +92,19 @@ export class StonksService {
   }
 
   getFinancials(ticker: string) {
-
-
     return this.http.get(`ws/fundamentals-timeseries/v1/finance/timeseries/${ticker}?lang=en-US&region=US&symbol=${ticker}&padTimeSeries=true&type=trailingPretaxIncome,annualGrossProfit,trailingTotalExpenses,annualTotalRevenue,trailingGrossProfit,trailingTotalRevenue,annualPretaxIncome,annualTotalExpenses&merge=false&period1=493590046&period2=1613148405&corsDomain=finance.yahoo.com`);
+  }
+
+  addToWatchlist(ticker: string): Observable<CompanyInfo> {
+    return this.http.post<CompanyInfo>(`api/stonks/${ticker}/add-to-watchlist`, {});
+  }
+
+  removeFromWatchlist(ticker: string): Observable<CompanyInfo>  {
+    return this.http.post<CompanyInfo>(`api/stonks/${ticker}/remove-from-watchlist`, {});
+  }
+
+  getWatchlist(): Observable<WatchlistItem[]> {
+    return this.http.get<WatchlistItem[]>('api/stonks/watchlist');
   }
 }
 

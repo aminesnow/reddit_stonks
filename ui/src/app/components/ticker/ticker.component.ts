@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { AutocompleteCompany } from '../../../app/models/AutocompleteCompany';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-ticker',
@@ -102,10 +103,13 @@ export class TickerComponent implements OnInit {
 
   loading: boolean;
 
+  updatingWatchlist: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private datepipe: DatePipe,
+    private toastService: ToastService,
     private stonksService: StonksService) { }
 
   ngOnInit(): void {
@@ -114,6 +118,24 @@ export class TickerComponent implements OnInit {
 
     this.route.queryParamMap.subscribe(params => {
       this.onRouteChanged(params);
+    });
+  }
+
+  addToWatchlist() {
+    this.updatingWatchlist = true;
+    this.stonksService.addToWatchlist(this.query).subscribe(comp => {
+      this.companyInfo = comp;
+      this.updatingWatchlist = false;
+      this.toastService.show(`${this.query} is added to the watch list`, { classname: 'bg-success text-light' });
+    });
+  }
+
+  removeFromWatchlist() {
+    this.updatingWatchlist = true;
+    this.stonksService.removeFromWatchlist(this.query).subscribe(comp => {
+      this.companyInfo = comp;
+      this.updatingWatchlist = false;
+      this.toastService.show(`${this.query} is removed from the watch list`, { classname: 'bg-danger text-light' });
     });
   }
 
@@ -235,8 +257,8 @@ export class TickerComponent implements OnInit {
         datas = datas["timeseries"]["result"];
 
         console.log(datas);
-        
-        
+
+
         // Total revenue
         const totalRevenue = datas
           .filter(data => data["annualTotalRevenue"] || data["trailingTotalRevenue"])
@@ -255,10 +277,10 @@ export class TickerComponent implements OnInit {
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
-              x: [],
-              y: [],
-              name: "Total Revenue",
-              type: "bar"
+            x: [],
+            y: [],
+            name: "Total Revenue",
+            type: "bar"
           });
 
         // Gross Profit
@@ -279,10 +301,10 @@ export class TickerComponent implements OnInit {
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
-              x: [],
-              y: [],
-              name: "Gross Profit",
-              type: "bar"
+            x: [],
+            y: [],
+            name: "Gross Profit",
+            type: "bar"
           });
 
         // Pretaxe income
@@ -303,10 +325,10 @@ export class TickerComponent implements OnInit {
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
-              x: [],
-              y: [],
-              name: "Pretaxe Income",
-              type: "bar"
+            x: [],
+            y: [],
+            name: "Pretaxe Income",
+            type: "bar"
           });
 
         // Total expenses
@@ -327,11 +349,11 @@ export class TickerComponent implements OnInit {
             acc["y"].push(curr["reportedValue"]["raw"]);
             return acc;
           }, {
-              x: [],
-              y: [],
-              name: "Total Expenses",
-              type: "bar"
-          });          
+            x: [],
+            y: [],
+            name: "Total Expenses",
+            type: "bar"
+          });
 
         this.revenueProfit.data = [totalRevenue, grossProfit];
         this.incomeExpenses.data = [pretaxIncome, totalExpenses];

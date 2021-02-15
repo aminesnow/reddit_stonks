@@ -10,6 +10,7 @@ const companySchema = createSchema({
     country: Type.string({ required: false }),
     website: Type.string({ required: false }),
     symbol: Type.string({ required: true }),
+    watchlist: Type.boolean({ required: false })
 });
 
 const Company = typedModel('Company', companySchema, 'companies');

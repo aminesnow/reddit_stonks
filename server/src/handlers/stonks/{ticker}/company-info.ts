@@ -18,7 +18,7 @@ export const GET: Operation = [async (req: Request, res: Response, next: NextFun
         res.status(200).json(company?.toJSON());
     } 
     else {
-        res.status(400).send({error: "company not found"});
+        res.status(404).send({error: "company not found"});
     }
 
 }];

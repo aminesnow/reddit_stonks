@@ -9,3 +9,7 @@ export interface StonkMention {
     author: string;
     source: string;
 }
+
+export interface WatchlistItem extends StonkMention {
+    longName: string;
+}

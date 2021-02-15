@@ -10,6 +10,13 @@ export const apiDoc: OpenAPIV3.Document = {
   },
   
   components: {
+    securitySchemes: {
+      jwt: {
+        in: 'header',
+        name: 'Authorization',
+        type: 'apiKey',
+      },
+    },
     responses: {
       Errors: {
         description: 'An error occured',

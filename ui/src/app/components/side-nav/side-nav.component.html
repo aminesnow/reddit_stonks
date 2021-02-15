@@ -1,5 +1,5 @@
 <div class="sidebar-sticky pt-3">
-    <ul class="nav flex-column" *ngIf="page">
+    <ul class="nav flex-column" *ngIf="page && isLoggedIn()">
         <li class="nav-item">
             <a class="nav-link" [routerLink]="'/'" [ngClass]="page == '/' ? 'active' : ''">
                 Dashboard
@@ -15,5 +15,23 @@
                 Stonk
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/watchlist'" [ngClass]="isActive('/watchlist') ? 'active' : ''">
+                Watchlist
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="logout()" style="cursor: pointer;">
+                Logout
+            </a>
+        </li>
     </ul>
+    <ul class="nav flex-column" *ngIf="page && !isLoggedIn()">
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="'/login'" [ngClass]="isActive('/login') ? 'active' : ''">
+                Log in
+            </a>
+        </li>
+    </ul>
+
 </div>

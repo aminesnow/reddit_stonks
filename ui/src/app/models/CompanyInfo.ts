@@ -7,4 +7,5 @@ export interface CompanyInfo {
     country?: string;
     website?: string;
     symbol: string;
-} 
+    watchlist: boolean;
+}
