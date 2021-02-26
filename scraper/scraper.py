@@ -1,7 +1,9 @@
-from psaw import PushshiftAPI
+import praw 
 import datetime
 from datetime import datetime, timedelta
 import re
+
+from praw.reddit import Submission
 import utils.db_connector as db
 import utils.get_env as env
 
@@ -32,57 +34,68 @@ def isTickerFormat(word):
 
     return isTicker and (dolla or correctSize)
 
-if __name__ == "__main__":
 
+
+if __name__ == "__main__":
     SOURCES = env.get_env("SOURCES")
     DAYS = int(env.get_env("DAYS"))
+    REDDIT_ID = env.get_env("REDDIT_ID")
+    REDDIT_USER = env.get_env("REDDIT_USER")
+    REDDIT_SECRET = env.get_env("REDDIT_SECRET")
+
+    reddit = praw.Reddit(
+        client_id=REDDIT_ID,
+        client_secret=REDDIT_SECRET,
+        user_agent="python:stonks:v1.0.0 (by u/{})".format(REDDIT_USER)
+    )
 
     yh_tickers = db.get_yh_tickers()
     mentions = db.get_mentions()
 
     sources = SOURCES.split(':')
-    api = PushshiftAPI()
 
     date = datetime.today() - timedelta(days=DAYS)
     start_time = int(date.timestamp())
 
+    count = 0
     for source in sources:
         print('crawling {}'.format(source))
 
-        submissions = api.search_submissions(after=start_time,
-                                            subreddit=source,
-                                            filter=['id', 'full_link', 'permalink', 'author', 'title', 'subreddit'])
+        submissions = reddit.subreddit(source).new(limit=None)
 
         for submission in submissions:
-            title = submission.title
-            words = title.split()
-            # get possible tags in title
-            tickers = list(
-                filter(lambda w: len(w) > 1 and (w not in ['GME', 'AMC', ]),  # GME and AMC are just spam at this point, no data value
-                    map(lambda w: re.sub(r'[^a-zA-Z]', '', w),
-                        filter(isTickerFormat, words)
+            count = count +1 
+            if (submission.created_utc >= start_time):
+                title = submission.title
+                words = title.split()
+                # get possible tags in title
+                tickers = list(
+                    filter(lambda w: len(w) > 1 and (w not in ['GME', 'AMC', ]),  # GME and AMC are just spam at this point, no data value
+                        map(lambda w: re.sub(r'[^a-zA-Z]', '', w),
+                            filter(isTickerFormat, words)
+                            )
                         )
-                    )
-            )
+                )
 
-            if len(tickers) > 0:
-                for ticker in tickers:
-                    # check if sym exists and if not already scraped
-                    cnt_sym = yh_tickers.count_documents({"symbol": ticker})
-                    cnt_exists = mentions.count_documents(
-                        {"permalink": submission.permalink, "created_utc": submission.created_utc, "ticker": ticker})
-                    if (cnt_sym > 0 and cnt_exists <= 0):
-                        # save mention to db
-                        mention = {
-                            "reddit_id": submission.id,
-                            "title": title,
-                            "full_link": submission.full_link,
-                            "permalink": submission.permalink,
-                            "created_utc": submission.created_utc,
-                            "created_date": utc_to_local(submission.created_utc),
-                            "ticker": ticker,
-                            "author": submission.author,
-                            "source": submission.subreddit
-                        }
-                        mentions.insert_one(mention)
-                        print('ticker inserted {} | Date: {}'.format(ticker, mention["created_date"]))
+                if len(tickers) > 0:
+                    for ticker in tickers:
+                        # check if sym exists and if not already scraped
+                        cnt_sym = yh_tickers.count_documents({"symbol": ticker})
+                        cnt_exists = mentions.count_documents(
+                            {"permalink": submission.permalink, "created_utc": submission.created_utc, "ticker": ticker})
+                        if (cnt_sym > 0 and cnt_exists <= 0):
+                            # save mention to db
+                            mention = {
+                                "reddit_id": submission.id,
+                                "title": title,
+                                "full_link": submission.url,
+                                "permalink": submission.permalink,
+                                "created_utc": submission.created_utc,
+                                "created_date": utc_to_local(submission.created_utc),
+                                "ticker": ticker,
+                                "author": submission.author.name,
+                                "source": source
+                            }
+                            mentions.insert_one(mention)
+                            print('ticker inserted {} | Date: {}'.format(ticker, mention["created_date"]))
+        print(count)
